@@ -23,16 +23,24 @@ namespace NServiceBus.Transports.ZeroMQ.Tests
 		[Test]
 		public void CanSub()
 		{
-			var sut = new ZeroMqMessagePublisher();
+			var context = ZmqContext.Create();
+			var sut = new ZeroMqMessagePublisher(context);
 			Task.Factory.StartNew(Subscribe);
-			Thread.Sleep(11000);
 			
+			for (var i = 0; i < 5; i++)
+			{
+				Thread.Sleep(1000); 
+				sut.Publish(null, null);
+			}
+			
+			context.Dispose();
 		}
 
 		private void Subscribe()
 		{
-			using (var ctx = ZmqContext.Create())
-			using (var socket = ctx.CreateSocket(SocketType.SUB))
+			Trace.WriteLine("World");
+			using (var context = ZmqContext.Create())
+			using (var socket = context.CreateSocket(SocketType.SUB))
 			{
 				socket.SubscribeAll();
 				socket.Connect("tcp://127.0.0.1:5555");

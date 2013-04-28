@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Threading;
@@ -10,32 +11,60 @@ namespace NServiceBus.Transports.ZeroMQ
 {
 	public class ZeroMqMessagePublisher : IPublishMessages
 	{
-		public ZeroMqMessagePublisher()
+		private readonly ZmqContext _context;
+		private int counter = 0;
+		private ZmqSocket _request;
+		private ZmqSocket _control;
+
+		public ZeroMqMessagePublisher(ZmqContext context)
 		{
+			_context = context;
+			_control = _context.CreateSocket(SocketType.REP);
+			_request = _context.CreateSocket(SocketType.REQ);
+
+			_control.Bind("inproc://publish");
+			_request.Connect("inproc://publish");
+
 			Task.Factory.StartNew(Publish);
 		}
 
 		public bool Publish(TransportMessage message, IEnumerable<Type> eventTypes)
 		{
-			return true;
+			var status = _request.Send(++counter + "", Encoding.Unicode);
+			_request.Receive(Encoding.Unicode);
+			return (status == SendStatus.Sent);
 		}
 
-		public void Publish()
+		private void Publish()
 		{
-			using (ZmqContext context = ZmqContext.Create())
-			using (ZmqSocket server = context.CreateSocket(SocketType.PUB))
+			Trace.WriteLine("Hello");
+			using (var pub = _context.CreateSocket(SocketType.PUB))
 			{
-				server.Bind("tcp://*:5555");
-				var counter = 0;
+				pub.Bind("tcp://*:5555");
+				
 				while (true)
 				{
-					// Do Some 'work'
-					Thread.Sleep(1000);
-
-					// Send reply back to client
-					server.Send(++counter + "", Encoding.Unicode);
+					var msg = _control.Receive(Encoding.Unicode, TimeSpan.FromMilliseconds(200));
+					
+					if (_control.ReceiveStatus == ReceiveStatus.Interrupted) break;
+					if (msg == null) continue;
+					
+					var status = pub.Send(msg, Encoding.Unicode);
+					_control.Send("ok", Encoding.Unicode);
+					if (status == SendStatus.Interrupted)
+						break;
 				}
 			}
+
+			Trace.WriteLine("Publisher Done");
+		}
+	}
+
+	public class ZeroMqMessageSender : ISendMessages
+	{
+		public void Send(TransportMessage message, Address address)
+		{
+			
 		}
 	}
 }
