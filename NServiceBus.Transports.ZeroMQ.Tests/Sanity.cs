@@ -32,7 +32,8 @@ namespace NServiceBus.Transports.ZeroMQ.Tests
 				Thread.Sleep(1000); 
 				sut.Publish(null, null);
 			}
-			
+
+			sut.Dispose(); 
 			context.Dispose();
 		}
 
@@ -49,8 +50,6 @@ namespace NServiceBus.Transports.ZeroMQ.Tests
 				{
 					var msg = socket.Receive(Encoding.Unicode);
 					Trace.WriteLine("Received: " + msg);
-					Thread.Sleep(500);
-					
 				}
 			}
 		}
