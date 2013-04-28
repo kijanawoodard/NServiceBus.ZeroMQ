@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Transports.ZeroMQ", "NServiceBus.Transports.ZeroMQ\NServiceBus.Transports.ZeroMQ.csproj", "{9BB44DD1-53C4-4EF2-B82A-0C5026001D21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Transports.ZeroMQ.Tests", "..\NServiceBus.Transports.ZeroMQ.TEsts\NServiceBus.Transports.ZeroMQ.Tests.csproj", "{3852ADD5-4B95-4716-9A7D-D9D455C43835}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{9BB44DD1-53C4-4EF2-B82A-0C5026001D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BB44DD1-53C4-4EF2-B82A-0C5026001D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BB44DD1-53C4-4EF2-B82A-0C5026001D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3852ADD5-4B95-4716-9A7D-D9D455C43835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3852ADD5-4B95-4716-9A7D-D9D455C43835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3852ADD5-4B95-4716-9A7D-D9D455C43835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3852ADD5-4B95-4716-9A7D-D9D455C43835}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
