@@ -16,10 +16,11 @@ namespace NServiceBus.Transports.ZeroMQ
 
 		public ZeroMqMessagePublisher(ZmqContext context)
 		{
+			Console.WriteLine("Hey there");
 			_pub = context.CreateSocket(SocketType.PUB);
 			_pub.Bind("tcp://*:5555");
 
-			Trace.WriteLine("Hello");
+			Console.WriteLine("Hello");
 		}
 
 		public bool Publish(TransportMessage message, IEnumerable<Type> eventTypes)
@@ -31,14 +32,6 @@ namespace NServiceBus.Transports.ZeroMQ
 		public void Dispose()
 		{
 			_pub.Dispose();
-		}
-	}
-
-	public class ZeroMqMessageSender : ISendMessages
-	{
-		public void Send(TransportMessage message, Address address)
-		{
-			
 		}
 	}
 }
